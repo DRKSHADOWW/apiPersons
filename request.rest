@@ -1,13 +1,29 @@
+### Get
 GET http://localhost:3001/api/persons
 
-###
-DELETE http://localhost:3001/api/persons/1
+### GetId
+GET http://localhost:3001/api/persons/66f5759e9137a5e5c4923a65
 
-###
+### GetIdErr
+GET http://localhost:3001/api/persons/77f5759e9137a5e5c4923a65
+
+### Delete
+DELETE http://localhost:3001/api/persons/66f5759e9137a5e5c4923a65
+
+### Post
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
     {
-        "name": "casemiro",
+        "name": "casemiro arnaldo",
         "number": 12345
     }
+
+### Put
+PUT http://localhost:3001/api/persons/66f5759e9137a5e5c4923a65
+Content-Type: application/json
+
+{
+    "name": "mismisimo",
+    "number": 123456
+}
