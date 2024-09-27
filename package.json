@@ -7,7 +7,8 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "Andrés Murillo",
   "license": "ISC",
@@ -21,6 +22,8 @@
     "morgan": "1.10.0"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin-js": "^2.8.0",
+    "eslint": "9.11.1",
     "nodemon": "3.1.7"
   }
 }
