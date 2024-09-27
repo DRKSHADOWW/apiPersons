@@ -1,4 +1,4 @@
-require('dotenv').config();
+const config = require('./utils/config')
 require('./mongo')
 const unknownEndpoint = require('./middleware/unKnownEndPoint')
 const logRequestBody = require('./middleware/logRequestBody')
@@ -14,10 +14,8 @@ app.use(express.json())
 app.use(logRequestBody);
 app.use(morgan(':method :url :status :response-time ms - :res[content-length]'))
 
-
 let persons = []
   
- 
   app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
   })
@@ -29,9 +27,8 @@ let persons = []
     response.send(`
       <p>There are ${numberOfPersons} persons in the phonebook.</p>
       <p>Request received at: ${currentTime.toLocaleTimeString()} on ${currentTime.toLocaleDateString()} </p>
-      
     `).catch(error => next(error))
-  });
+  })
   
   app.get('/api/persons', (request, response, next) => {
     Person.find({})
@@ -50,8 +47,6 @@ let persons = []
         response.status(404).end()
       }
     }).catch(error => next(error))
-    
-   
   })
 
   app.delete('/api/persons/:id', (req, res, next) => {
@@ -68,9 +63,7 @@ let persons = []
   
     if (!body.name === undefined || !body.number === undefined) {
       return response.status(400).json({ error: 'name and number are required' });
-    }
-  
-    try {
+    }try {
       const existingPerson = await Person.findOne({ name: body.name });
   
       if (existingPerson) {
@@ -107,7 +100,6 @@ let persons = []
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
-const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+app.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`)
 })

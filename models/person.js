@@ -8,7 +8,7 @@ const personSchema = new Schema({
     minlength: 3
   },
   number: {
-    type: Number,
+    type: String,
     required: true,
     match: /^\d{2,3}-\d{7,8}$/
   }
