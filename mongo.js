@@ -2,7 +2,7 @@ const config = require('./utils/config')
 const mongoose = require('mongoose');
 
 
-const connectionString = config.personApp;
+const connectionString = config.MONGODB_URI_NOTES
 
 mongoose.connect(connectionString)
   .then(result => {
@@ -14,5 +14,5 @@ mongoose.connect(connectionString)
 
 process.on('uncaughtException', () => {
   mongoose.connection.close()
-});
+})
 

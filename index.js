@@ -1,20 +1,24 @@
 const config = require('./utils/config')
 require('./mongo')
+const express = require('express')
+const app = express()
+// const router = require('./controllers/notes')
 const unknownEndpoint = require('./middleware/unKnownEndPoint')
 const logRequestBody = require('./middleware/logRequestBody')
 const errorHandler = require('./middleware/errorHandler')
-const Person = require('./models/person')
-const express = require('express')
-const app = express()
+const Note = require('./models/note')
+require('express-async-errors')
 app.use(express.static( 'dist'))
 const morgan = require('morgan')
 const cors = require('cors')
 app.use(cors())
 app.use(express.json())
-app.use(logRequestBody);
+app.use(logRequestBody)
 app.use(morgan(':method :url :status :response-time ms - :res[content-length]'))
 
-let persons = []
+let notes = []
+
+// app.use('/api/notes', router)
   
   app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
@@ -22,71 +26,75 @@ let persons = []
 
   app.get('/info', (request, response, next) => {
     const currentTime = new Date();
-    const numberOfPersons = persons.length;
+    const numberOfnotes = notes.length;
      
     response.send(`
-      <p>There are ${numberOfPersons} persons in the phonebook.</p>
+      <p>There are ${numberOfnotes} notes in the phonebook.</p>
       <p>Request received at: ${currentTime.toLocaleTimeString()} on ${currentTime.toLocaleDateString()} </p>
     `).catch(error => next(error))
   })
   
-  app.get('/api/persons', (request, response, next) => {
-    Person.find({})
-      .then(persons => {
-      response.json(persons)
-   }).catch(error => next(error))
-  })
+  app.get('/api/notes', async (request, response, next) => {
+    // Note.find({})
+    //   .then(notes => {
+    //   response.json(notes)
 
-  app.get('/api/persons/:id', (request, response, next) => {
+    const note = await Note.find({})
+    response.json(note)
+
+   })
+  
+
+  app.get('/api/notes/:id', (request, response, next) => {
     const id = request.params.id
-    Person.findById(id)
-    .then(person =>{
-      if (person) {
-        response.json(person)
+    Note.findById(id)
+    .then(note =>{
+      if (note) {
+        response.json(note)
       } else {
         response.status(404).end()
       }
     }).catch(error => next(error))
   })
 
-  app.delete('/api/persons/:id', (req, res, next) => {
-    const id  = req.params.id
+  app.delete('/api/notes/:id', async (req, res) => {
+    const id = req.params.id;
+    const note = await Note.findByIdAndDelete(id)
 
-    Person.findByIdAndDelete(id)
-      .then(result => {
+      if (!note) {
+        res.status(404).json({ message: 'Note not found' })
+      } else {
         res.status(204).end()
-      }).catch(error => next(error))
+      }
+    
   })
   
-  app.post('/api/persons', async (request, response) => {
+  app.post('/api/notes', async (request, response) => {
     const body = request.body;
   
-    if (!body.name === undefined || !body.number === undefined) {
+    if (!body.name || !body.number) {
       return response.status(400).json({ error: 'name and number are required' });
-    }try {
-      const existingPerson = await Person.findOne({ name: body.name });
+    }
+      const existingNote = await Note.findOne({ name: body.name });
   
-      if (existingPerson) {
+      if (existingNote) {
         return response.status(400).json({ error: 'name must be unique' });
       }
   
-      const newPerson = new Person({
+      const newNote = new Note({
         name: body.name,
         number: body.number
-      });
-  
-      const savedPerson = await newPerson.save();
-      response.json(savedPerson);
-    } catch (error) {
-      console.error(error);
-      response.status(500).json({ error: 'Error creating person' });
-    }
-  });
+      })
+      
+      const savedNote = await newNote.save()
+      response.status(201).json(savedNote)
+    
+  })
 
   app.put('/api/notes/:id', (request, response, next) => {
     const { name, number } = request.body
   
-    Person.findByIdAndUpdate(
+    Note.findByIdAndUpdate(
       request.params.id, 
       { name, number },
       { new: true, runValidators: true, context: 'query' }
@@ -97,9 +105,13 @@ let persons = []
       .catch(error => next(error))
   })
 
+ 
+
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
-app.listen(config.PORT, () => {
+const server = app.listen(config.PORT,  () => {
   console.log(`Server running on port ${config.PORT}`)
 })
+
+module.exports = {app, server}

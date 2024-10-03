@@ -15,10 +15,18 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
     {
-        "name": "casemiro arnaldo",
-        "number": 12345
+        "name": "casemiro nmini",
+        "number": "12-12345678"
     }
 
+### Post without a  name
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+    {
+        "number": "12-12345678"
+    }
 ### Put
 PUT http://localhost:3001/api/persons/66f5759e9137a5e5c4923a65
 Content-Type: application/json
