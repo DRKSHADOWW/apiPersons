@@ -5,17 +5,10 @@ const userSchema = new Schema({
   username: String,
   name: String,
   passwordHash: String,
-<<<<<<< HEAD
   persons: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Person'
-=======
-  notes: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Note'
->>>>>>> a464fd1e6efbf4eec7a80b98aa9727af674eadd7
     }
   ],
 })

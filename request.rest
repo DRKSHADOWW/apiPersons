@@ -15,13 +15,8 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
     {
-<<<<<<< HEAD
         "name": "casemiro arnaldo",
         "number": 1212345678
-=======
-        "name": "casemiro nmini",
-        "number": "12-12345678"
->>>>>>> a464fd1e6efbf4eec7a80b98aa9727af674eadd7
     }
 
 ### Post without a  name
