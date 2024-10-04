@@ -5,12 +5,11 @@ const personSchema = new Schema({
   name: {
     type: String,
     required: true,
-    minlength: 3
+    minlength: 10
   },
   number: {
     type: Number,
     required: true,
-    match: /^\d{2,3}-\d{7,8}$/
   }
 }, { validateBeforeSave: true })
 

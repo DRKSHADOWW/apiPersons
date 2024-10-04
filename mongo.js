@@ -1,18 +1,19 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+const {info, error} = require('./utils/logger')
+const mongoose = require('mongoose')
+const {MONGODB_URI} = require('./utils/config')
 
 
-const connectionString = process.env.personApp;
+const connectionString = process.env.MONGODB_URI
 
-mongoose.connect(connectionString)
+  mongoose.connect(connectionString)
   .then(result => {
-    console.log('connected to MongoDB')
+    info('connected to MongoDB')
   })
   .catch(error => {
-    console.log('error connecting to MongoDB:', error.message)
-  });
+    error('error connecting to MongoDB:', error.message)
+  })
 
 process.on('uncaughtException', () => {
   mongoose.connection.close()
-});
+})
 
