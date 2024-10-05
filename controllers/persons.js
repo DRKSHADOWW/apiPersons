@@ -7,18 +7,17 @@ router.get('/', async (request, response) => {
   
 })
 
-router.get('/:id', async (request, response) => {
+router.get('/:id', async (request, response, next) => {
   const id = request.params.id
 
-  const person = Person.findById(id)
-    
-      if (person) {
-        response.json(person)
-      } else {
-        response.status(404).end()
-      }
-    
-    
+ 
+    const person = await Person.findById(id)
+    if (!person) {
+      response.status(404).end()
+    } else {
+      response.json(person)
+    }
+  
 })
 
 router.post('/', async (request, response) => {
@@ -31,30 +30,37 @@ router.post('/', async (request, response) => {
   const existingPerson = await Person.findOne({ name: body.name })
 
   if (existingPerson) {
+
     existingPerson.number = body.number
     await existingPerson.save()
     response.json(existingPerson)
+
   } else {
+
     const person = new Person({
       name: body.name,
       number: body.number
+      
     })
-  const savedPerson = await person.save()
-  response.json(savedPerson)
+    
+      const savedPerson = await person.save()
+      response.status(200).json(savedPerson)
+   
+  
   }
 })
 
-router.delete('/:id', (request, response, next) => {
+router.delete('/:id', async (request, response, next) => {
    const id =  request.params.id
-
-  Person.findByIdAndDelete(id)
-    .then(() => {
+   
+      await Person.findByIdAndDelete(id)
       response.status(204).end()
-    })
-    .catch(error => next(error))
+
+      next(error)
+    
 })
 
-router.put('/:id', (request, response, next) => {
+router.put('/:id', async (request, response, next) => {
   const body = request.body
   const id = request.body.id
 
@@ -63,11 +69,10 @@ router.put('/:id', (request, response, next) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(id, newPerson, { new: true })
-    .then(updatedPerson => {
-      response.json(updatedPerson)
-    })
-    .catch(error => next(error))
+  const updatePerson = await Person.findByIdAndUpdate(id, newPerson, { new: true })
+  response.json(updatePerson)
+   
+    
 })
 
 module.exports = router

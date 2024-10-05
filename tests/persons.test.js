@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const {server} = require('../index')
 const assert = require('node:assert')
-const {initialPersons, api, getAllPersons} = require('../utils/helpers')
+const {initialPersons, api, getAllPersons, personsInDb} = require('../utils/test_helper')
 const Person = require('../models/person')
 
 beforeEach(async()=>{
@@ -36,7 +36,7 @@ test('persons are returned as json', async() => {
 })
 
 
-test('there are two notes', async () =>{
+test('there are two persons', async () =>{
   const {response} = await getAllPersons()
   expect(response.body).toHaveLength(initialPersons.length)
 })
@@ -102,6 +102,37 @@ describe('POST /api/persons', () =>{
     const updatedPerson = await Person.findOne({ name: 'carmelo diaz' })
     expect(updatedPerson.number).toBe(updatedNumber)
   })
+
+  test('a specific person can be viewed', async () => {
+    const personsAtStart = await personsInDb()
+  
+    const personToView = personsAtStart[0]
+  
+    const resultPerson = await api
+      .get(`/api/persons/${personToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  
+    assert.deepStrictEqual(resultPerson.body.name, personToView.name)
+    assert.deepStrictEqual(resultPerson.body.number, personToView.number)
+
+  })
+  
+
+  test('person without content is not added', async () => {
+    const newPerson = {
+      name: "albaricoque"
+    }
+  
+    await api
+      .post('/api/persons')
+      .send(newPerson)
+      .expect(400)
+  
+    const personsAtEnd = await personsInDb()
+  
+    assert.strictEqual(personsAtEnd.length, initialPersons.length)
+  })
   
 
 })
@@ -122,7 +153,23 @@ describe('DELETE  /api/persons/:id', () =>{
     expect(content).not.toContain(personToDelete.content)
   })
 
-  test(' a note that do not exist can not be deleted', async () =>{
+  // test('a person can be deleted', async () => {
+  //   const personsAtStart = await helper.personsInDb()
+  //   const personToDelete = personsAtStart[0]
+  
+  //   await api
+  //     .delete(`/api/persons/${personToDelete.id}`)
+  //     .expect(204)
+  
+  //   const personsAtEnd = await helper.personsInDb()
+  
+  //   const contents = personsAtEnd.map(r => r.content)
+  //   assert(!contents.includes(personToDelete.content))
+  
+  //   assert.strictEqual(personsAtEnd.length, helper.initialpersons.length - 1)
+  // })
+
+  test('a person that do not exist can not be deleted', async () =>{
     await api.delete('/api/persons/1000')
     .expect(400)
   
@@ -130,6 +177,8 @@ describe('DELETE  /api/persons/:id', () =>{
     assert.strictEqual(response.body.length, initialPersons.length)
   
   })
+
+ 
 
 })
 
