@@ -5,7 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=test jest --verbose --silent",
+    "test": "cross-env NODE_ENV=test jest --verbose  tests/users.test.js ",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "lint": "eslint .",
@@ -15,7 +15,7 @@
   "license": "ISC",
   "description": "https://apipersons-iyvy.onrender.com",
   "dependencies": {
-    "bcrypt": "5.1.1",
+    "bcrypt": "^5.1.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "16.4.5",

@@ -1,12 +1,16 @@
 const mongoose = require('mongoose')
 const {server} = require('../index')
 const assert = require('node:assert')
-const {initialPersons, api, getAllPersons, personsInDb} = require('../utils/test_helper')
-const Person = require('../models/person')
+const {initialPersons, api, getAllPersons, personsInDb, usersInDb} = require('../utils/test_helper')
+const Person = require('../models/Person')
+
+
 
 beforeEach(async()=>{
   await Person.deleteMany({})
+  
 
+  
   //pararell
   // const personObjects = initialPersons.map(person => new Person(person))
   // const promise = personObjects.map(person => person.save())
@@ -23,6 +27,8 @@ beforeEach(async()=>{
 
   // const person2 = new Person(initialPersons[1])
   // await  person2.save()
+
+  
 
 })
 
@@ -178,9 +184,11 @@ describe('DELETE  /api/persons/:id', () =>{
   
   })
 
- 
-
 })
+
+
+
+
 
 
 afterAll(async () => {

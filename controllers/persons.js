@@ -1,5 +1,7 @@
 const router = require('express').Router()
-const Person = require('../models/person')
+const Person = require('../models/Person')
+const User = require('../models/user')
+
 
 router.get('/', async (request, response) => {
   const persons = await Person.find({})
@@ -7,7 +9,7 @@ router.get('/', async (request, response) => {
   
 })
 
-router.get('/:id', async (request, response, next) => {
+router.get('/:id', async (request, response) => {
   const id = request.params.id
 
  
@@ -22,6 +24,12 @@ router.get('/:id', async (request, response, next) => {
 
 router.post('/', async (request, response) => {
   const body = request.body
+  const userId = request.body.id
+  
+  if (!userId) {
+    return response.status(400).json({ error: 'userId is a required field' })
+  }
+  const user = await User.findById(userId)
 
   if (!body.name || !body.number) {
     return response.status(400).json({ error: 'name anad number are fields requerided' })
@@ -37,13 +45,17 @@ router.post('/', async (request, response) => {
 
   } else {
 
-    const person = new Person({
+    const newPerson = new Person({
       name: body.name,
-      number: body.number
+      number: body.number,
+      //important: body.important === undefined ? false : body.important,
+      user: user._id
       
     })
     
-      const savedPerson = await person.save()
+      const savedPerson = await newPerson.save()
+      user.persons = [...user.persons, savedPerson._id]
+      await user.save()
       response.status(200).json(savedPerson)
    
   
@@ -60,7 +72,7 @@ router.delete('/:id', async (request, response, next) => {
     
 })
 
-router.put('/:id', async (request, response, next) => {
+router.put('/:id', async (request, response) => {
   const body = request.body
   const id = request.body.id
 

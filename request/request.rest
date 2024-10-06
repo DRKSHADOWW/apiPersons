@@ -16,7 +16,8 @@ Content-Type: application/json
 
     {
         "name": "casemiro arnaldo",
-        "number": 1212345678
+        "number": 1212345678,
+        "user": "6701862d0d64bd42b34992d7"
     }
 
 ### Post without a  name

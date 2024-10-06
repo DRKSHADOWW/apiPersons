@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 const { Schema, model } = mongoose
 
 const userSchema = new Schema({
-  username: String,
+  username: {
+    type: String,
+    required: true,
+    unique: true  // asegura la unicidad de username
+  },
   name: String,
   passwordHash: String,
   persons: [
@@ -10,7 +14,7 @@ const userSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'Person'
     }
-  ],
+  ]
 })
 
 userSchema.set('toJSON', {

@@ -5,6 +5,7 @@ require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const router = require('./controllers/persons')
+const usersRouter = require('./controllers/users')
 const {requestLogger, unknownEndpoint, errorHandler} = require('./utils/middleware')
 
 app.use(cors())
@@ -12,6 +13,7 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
 
+app.use('/api/users', usersRouter)
 app.use('/api/persons', router)
 
 app.use(unknownEndpoint)

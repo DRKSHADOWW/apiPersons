@@ -1,7 +1,8 @@
 const app = require('../app')
 const supertest = require('supertest')
 const api = supertest(app)
-const Person = require('../models/person')
+const Person = require('../models/Person')
+const User = require('../models/User')
 
 
 const initialPersons = [
@@ -39,6 +40,14 @@ const initialPersons = [
      }
   }
 
+  // users
+
+  const usersInDb = async () => {
+    const users = await User.find({})
+    return users.map(u => u.toJSON())
+  }
   
 
-  module.exports = {initialPersons, api , getAllPersons, nonExistingId, personsInDb}
+  
+
+  module.exports = {initialPersons, api, usersInDb, getAllPersons, nonExistingId, personsInDb}

@@ -10,6 +10,10 @@ const personSchema = new Schema({
   number: {
     type: Number,
     required: true,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref:  'User'
   }
 }, { validateBeforeSave: true })
 
