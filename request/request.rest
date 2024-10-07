@@ -15,9 +15,19 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
     {
-        "name": "casemiro arnaldo",
+        "name": "cristian trujillo",
+        "number": 1212345678
+        
+    }
+
+    ### Post
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+    {
+        "name": "casemoro pitrogo",
         "number": 1212345678,
-        "user": "6701862d0d64bd42b34992d7"
+        "userId": "67040cd0a058bd5b64b02274"
     }
 
 ### Post without a  name

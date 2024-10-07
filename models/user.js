@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema, model } = mongoose
 
+
 const userSchema = new Schema({
   username: {
     type: String,
@@ -27,6 +28,7 @@ userSchema.set('toJSON', {
     delete returnedObject.passwordHash
   }
 })
+
 
 const User = model('User', userSchema)
 
