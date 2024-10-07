@@ -20,14 +20,14 @@ Content-Type: application/json
         
     }
 
-    ### Post
+### Post userId
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
     {
         "name": "casemoro pitrogo",
         "number": 1212345678,
-        "userId": "67040cd0a058bd5b64b02274"
+        "userId": "67043fe15f1252e75c6f8f8d"
     }
 
 ### Post without a  name
