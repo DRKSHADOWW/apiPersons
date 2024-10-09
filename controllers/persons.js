@@ -1,6 +1,8 @@
 const router = require('express').Router()
-const Person = require('../models/Person')
+const Person = require('../models/person')
 const User = require('../models/user')
+const {tokenExtractor} = require('../utils/middleware')
+
 
 
 router.get('/', async (request, response) => {
@@ -24,14 +26,16 @@ router.get('/:id', async (request, response) => {
   
 })
 
-router.post('/', async (request, response) => {
-  const {name, number, userId} = request.body
+router.post('/', tokenExtractor, async (request, response, next) => {
+  const {name, number} = request.body
+
   
-  if (!userId) {
-    return response.status(400).json({ error: 'userId is a required field' })
-  }
+
+  const {userId} = request
   const user = await User.findById(userId)
-  console.log(user)
+
+  
+
   if (!name || !number) {
     return response.status(400).json({ error: 'name anad number are fields requerided' })
   }
@@ -51,8 +55,7 @@ router.post('/', async (request, response) => {
       number,
       //important: body.important === undefined ? false : body.important,
       user: user.id
-      
-      
+
     })
     
       const savedPerson = await newPerson.save()
@@ -64,7 +67,7 @@ router.post('/', async (request, response) => {
   }
 })
 
-router.delete('/:id', async (request, response, next) => {
+router.delete('/:id',tokenExtractor, async (request, response, next) => {
    const id =  request.params.id
    
       await Person.findByIdAndDelete(id)
@@ -73,7 +76,7 @@ router.delete('/:id', async (request, response, next) => {
     
 })
 
-router.put('/:id', async (request, response) => {
+router.put('/:id',tokenExtractor, async (request, response) => {
   const body = request.body
   const id = request.body.id
 

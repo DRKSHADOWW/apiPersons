@@ -1,0 +1,14 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3MDQzZmUxNWYxMjUyZTc1YzZmOGY4ZCIsImlhdCI6MTcyODUwMTI1OSwiZXhwIjoxNzI4NTg3NjU5fQ.XFWYvhjTZKeLn-zMCqmbZg8xM70DBIVAxATkahfNgxM
+
+
+    {
+        "name": "CR7 Siuuuuuuuuu",
+        "number": 12345678
+    }
+
+### DELETE
+DELETE http://localhost:3001/api/persons/66fdc4e53d4fee4109f2c361
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3MDVjN2E4MTc3NjI4MGUyM2NkMmE3YyIsImlhdCI6MTcyODQ5MDE2OX0.Du4WVQqHvBq37S7KHQ_MpdFk16HfkWFfN1T3JdaYVN8
+
