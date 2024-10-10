@@ -1,5 +1,7 @@
 const logger = require('./logger')
 const jwt = require('jsonwebtoken')
+const {SECRET}  = require('../utils/config')
+
 
 const requestLogger = (request, response, next) => {
     logger.info('Method:', request.method)
@@ -15,30 +17,36 @@ const requestLogger = (request, response, next) => {
 
   const errorHandler = (error, request, response, next) => {
     logger.error(error.message)
-  
+
+    // CastError: response => response.status(400).send({id used is malformed})
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
     } else if (error.name === 'ValidationError') {
       return response.status(400).json({ error: error.message })
     } else if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
       return response.status(400).json({ error: 'expected `username` to be unique' })
-    }
+    } else if (error.name === 'JsonWebTokenError') {
+      return response.status(400).send({ error: 'token missing or invalid'})
+    } else if (error.name === 'TokenExpiredError') {
+      return response.status(401).json({error: 'token expired'})
+    } 
   
     next(error)
   }
 
   const tokenExtractor = (request, response, next) => {
     const authorization = request.get('authorization')
-    let token = ""
+    
     if(authorization && authorization.toLowerCase().startsWith('bearer')){
       token = authorization.substring(7)
+    } else {
+      token = null
     }
-    let  decodedToken = {}
-  
-    decodedToken = jwt.verify(token, process.env.SECRET)
-        if(!decodedToken.id  || !token){
-          return response.status(401).json({ error: 'token invalid' })
-        }
+
+    const decodedToken = jwt.verify(token, SECRET)
+    if(!decodedToken.id  || !token){
+      return response.status(401).json({ error: 'token invalid' })
+    }
   
   const {id: userId } = decodedToken
   request.userId = userId

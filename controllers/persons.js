@@ -3,38 +3,28 @@ const Person = require('../models/person')
 const User = require('../models/user')
 const {tokenExtractor} = require('../utils/middleware')
 
-
-
 router.get('/', async (request, response) => {
   const persons = await Person
   .find({}).populate('user', {username: 1, name: 1})
-  
   response.json(persons)
-  
 })
 
 router.get('/:id', async (request, response) => {
   const id = request.params.id
 
- 
     const person = await Person.findById(id)
     if (!person) {
       response.status(404).end()
     } else {
       response.json(person)
     }
-  
 })
 
 router.post('/', tokenExtractor, async (request, response, next) => {
   const {name, number} = request.body
 
-  
-
   const {userId} = request
   const user = await User.findById(userId)
-
-  
 
   if (!name || !number) {
     return response.status(400).json({ error: 'name anad number are fields requerided' })
@@ -69,11 +59,9 @@ router.post('/', tokenExtractor, async (request, response, next) => {
 
 router.delete('/:id',tokenExtractor, async (request, response, next) => {
    const id =  request.params.id
-   
+  
       await Person.findByIdAndDelete(id)
       response.status(204).end()
-
-    
 })
 
 router.put('/:id',tokenExtractor, async (request, response) => {
@@ -88,7 +76,6 @@ router.put('/:id',tokenExtractor, async (request, response) => {
   const updatePerson = await Person.findByIdAndUpdate(id, newPerson, { new: true })
   response.json(updatePerson)
    
-    
 })
 
 module.exports = router

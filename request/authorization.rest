@@ -1,3 +1,9 @@
+
+GET http://localhost:3001/api/persons
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3MDQzZmUxNWYxMjUyZTc1YzZmOGY4ZCIsImlhdCI6MTcyODUwMTI1OSwiZXhwIjoxNzI4NTg3NjU5fQ.XFWYvhjTZKeLn-zMCqmbZg8xM70DBIVAxATkahfNgxM
+
+
+###POST
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3MDQzZmUxNWYxMjUyZTc1YzZmOGY4ZCIsImlhdCI6MTcyODUwMTI1OSwiZXhwIjoxNzI4NTg3NjU5fQ.XFWYvhjTZKeLn-zMCqmbZg8xM70DBIVAxATkahfNgxM

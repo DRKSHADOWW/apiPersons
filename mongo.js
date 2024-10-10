@@ -13,7 +13,8 @@ const connectionString = process.env.MONGODB_URI
     error('error connecting to MongoDB:', error.message)
   })
 
-process.on('uncaughtException', () => {
+process.on('uncaughtException', (error) => {
   mongoose.connection.close()
+  console.log(error)
 })
 

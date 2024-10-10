@@ -1,8 +1,8 @@
 const app = require('../app')
 const supertest = require('supertest')
 const api = supertest(app)
-const Person = require('../models/Person')
-const User = require('../models/User')
+const Person = require('../models/person')
+const User = require('../models/user')
 
 
 const initialPersons = [

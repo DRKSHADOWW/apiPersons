@@ -8,16 +8,17 @@ const router = require('./controllers/persons')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 
-
-
-const {requestLogger, unknownEndpoint, errorHandler, tokenExtractor} = require('./utils/middleware')
+const {requestLogger, 
+        unknownEndpoint, 
+        errorHandler 
+        } = require('./utils/middleware')
 
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
 
-app.use(tokenExtractor)
+
 app.use('/api/users', usersRouter)
 app.use('/api/persons', router)
 app.use('/api/login', loginRouter)
